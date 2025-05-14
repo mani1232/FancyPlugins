@@ -24,7 +24,7 @@ public class HologramData implements YamlData {
     private final String name;
     private final HologramType type;
     private Location location;
-    private UUID worldUID;
+    private String worldName;
     private boolean hasChanges;
     private int visibilityDistance = DEFAULT_VISIBILITY_DISTANCE;
     private Visibility visibility = DEFAULT_VISIBILITY;
@@ -41,10 +41,11 @@ public class HologramData implements YamlData {
         this.name = name;
         this.type = type;
         this.location = location;
+        this.worldName = location.getWorld().getName();
     }
 
-    public @NotNull UUID getWorldUID() {
-        return worldUID;
+    public String getWorldName() {
+        return worldName;
     }
 
     public @NotNull String getName() {
@@ -142,16 +143,16 @@ public class HologramData implements YamlData {
 
     @Override
     public boolean read(ConfigurationSection section, String name) {
-        worldUID = UUID.fromString(section.getString("location.world", "error"));
+        worldName = section.getString("location.world", "error");
         float x = (float) section.getDouble("location.x", 0);
         float y = (float) section.getDouble("location.y", 0);
         float z = (float) section.getDouble("location.z", 0);
         float yaw = (float) section.getDouble("location.yaw", 0);
         float pitch = (float) section.getDouble("location.pitch", 0);
 
-        World world = Bukkit.getWorld(worldUID);
+        World world = Bukkit.getWorld(worldName);
         if (world == null) {
-            FancyHologramsPlugin.get().getFancyLogger().warn("Could not load hologram '" + name + "', because the world '" + worldUID + "' is not loaded");
+            FancyHologramsPlugin.get().getFancyLogger().warn("Could not load hologram '" + name + "', because the world '" + worldName + "' is not loaded");
             return false;
         }
 
@@ -171,7 +172,7 @@ public class HologramData implements YamlData {
     @Override
     public boolean write(ConfigurationSection section, String name) {
         section.set("type", type.name());
-        section.set("location.world", location.getWorld().getUID().toString());
+        section.set("location.world", location.getWorld().getName());
         section.set("location.x", location.x());
         section.set("location.y", location.y());
         section.set("location.z", location.z());
