@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 public class HologramData implements YamlData {
 
