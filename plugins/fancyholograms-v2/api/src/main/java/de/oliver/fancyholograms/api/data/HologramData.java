@@ -40,7 +40,9 @@ public class HologramData implements YamlData {
         this.name = name;
         this.type = type;
         this.location = location;
-        this.worldName = location.getWorld().getName();
+        if (location.getWorld() != null) {
+            this.worldName = location.getWorld().getName();
+        }
     }
 
     public String getWorldName() {
